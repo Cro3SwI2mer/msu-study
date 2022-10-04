@@ -95,14 +95,14 @@ Two groups:
 #### 1. Integer number
 
 `var x, y: integer;`. ranges: 
-	- smallint: [-128, ...,  128]
-	- byte: [0, ..., 255] = int8
-	- shortint: [-2^15, ..., 2^15 - 1] = int16
-	- word: [0, ..., 2^16 - 1]
-	- longint: [-2^31, ..., 2^31 - 1] = int32
-	- longword: [0, ..., 2^32 - 1]
-	- int64: [-2^63, ..., 2^63 - 1]
-	- qword: [0, ..., 2^64 - 1]
+- smallint: [-128, ...,  128]
+- byte: [0, ..., 255] = int8
+- shortint: [-2^15, ..., 2^15 - 1] = int16
+- word: [0, ..., 2^16 - 1]
+- longint: [-2^31, ..., 2^31 - 1] = int32
+- longword: [0, ..., 2^32 - 1]
+- int64: [-2^63, ..., 2^63 - 1]
+- qword: [0, ..., 2^64 - 1]
 
 Examples:
 ```
