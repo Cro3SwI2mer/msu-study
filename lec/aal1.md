@@ -12,6 +12,7 @@ First term courses, read at the Faculty of Computational Mathematics and Cyberne
 - [Lecture 7](#lecture-7)
 - [Lecture 8](#lecture-8)
 - [Lecture 9](#lecture-9)
+- [Lecture 10](#lecture-10)
 
 Lecture 4
 ---------
@@ -96,12 +97,14 @@ Two groups:
 
 ### Simple types
 
+[Ordinal types](https://www.freepascal.org/docs-html/ref/refsu4.html)
+
 #### 1. Integer number
 
 `var x, y: integer;`. ranges: 
-- smallint: [-128, ...,  128]
+- shortint: [-128, ...,  127]
 - byte: [0, ..., 255] = int8
-- shortint: [-2^15, ..., 2^15 - 1] = int16
+- smallint: [-2^15, ..., 2^15 - 1] = int16
 - word: [0, ..., 2^16 - 1]
 - longint: [-2^31, ..., 2^31 - 1] = int32
 - longword: [0, ..., 2^32 - 1]
@@ -838,3 +841,160 @@ Operations:
 - intersection -> x * y
 - x \ y -> x - y
 - boolean operations
+
+Lecture 10
+----------
+
+### Memory classes
+
+1. 
+2. 
+3. 
+4. **External** (file)
+
+### Complex types
+
+#### 4. File
+
+[File handlling functions](https://www.freepascal.org/docs-html/rtl/system/filefunctions.html)
+
+Example:
+
+```
+program A(input, output, F);
+
+type F = file of integer;
+
+var F1, F2 : Fint;
+
+begin
+	Assign(F1, 'C:/temp/a.int');
+	Reset(F1);
+	Assign(output, 'LPT');
+end.
+```
+Access method:
+1. Consistent
+2. Direct
+
+`Reset(F1);` - opens file *F1* for reading. [Reset](https://www.freepascal.org/docs-html/rtl/system/reset.html)
+
+`var FileMode : integer = {0, 1, 2 - one of this}` [FileMode](https://www.freepascal.org/docs-html/rtl/system/filemode.html)
+
+Example: [{$I-}](https://www.freepascal.org/docs-html/prog/progsu38.html)
+
+```
+{$I-} Reset(F1); 
+R := IOResult;
+if k <> 0 then
+	begin
+		if k = 2 then {file does not exist}
+		else if k = 104 {reading is prohibited}
+		{$I+}
+	end
+```
+
+Task 1:
+
+```
+function SumPosGtLast(var F: Fint): integer;
+	var x, Last, s : integer;
+begin
+	Reset(F);
+	s := -1; {empty}
+	if not eof(F) then
+		begin
+			s := 0;
+			repeat 
+				read(F, Last); 
+			until eof(F);
+			Reset(F);
+			repeat 
+				read(F, x);
+				if (x > 0) and (x > Last) then
+					begin
+						s := s + x;
+					end
+			until eof(F);
+		end
+	SumPosGtLast := s;
+
+end;
+```
+File modes:
+1. Only reading
+2. Writing and reading
+
+Task 2:
+
+```
+procedure CopyPos(var F, G: Fint);
+	var x : integer;
+begin
+	Reset(F); ReWrite(G);
+	while not eof(F) do
+		begin
+			read(F, x);
+			if x > 0 then
+				begin
+					write(G, x);
+				end
+		end;
+	Close(G); {or Flush(G);}
+	Close(F); {better not to write as we were not writing to F}
+end;
+```
+Stream modes:
+1. With/without buffering
+
+### Reference
+
+[Pointers](https://www.freepascal.org/docs-html/ref/refse15.html#x42-620003.4)
+
+reference type -> `^` -> type name -> `;` ->
+
+Example:
+
+```
+type
+	Ri = ^integer; {RRi = ^^integer; - syntax error}
+	RRi = ^Ri;
+
+var
+	a, b : integer;
+	x, y : Ri;
+	p, q : RRi;
+
+begin
+	{a -> |100| -> ?}
+	{b -> |101| -> ?}
+	{x -> |102| -> |?|}
+	{y -> |103| -> |?|}
+	{p -> |104| -> |?|}
+	{q -> |105| -> |?|}
+	a := 1;
+	{a -> |100| -> 1}
+	b := a + 1;
+	{b -> |101| -> 2}
+	x := y;
+	{x := @a; => x -> |102| -> |100| - prohibited in standard, but not in FPC}
+	new(x);
+	y := x;
+	{x -> |102| -> |106| -> ? (same for y)}
+	{y -> |103| -> |106| -> ? (same for x)}
+	x^ := 3;
+	{x -> |103| -> |106| -> 3}
+	new(x);
+	x^ := -2;
+	{x -> |102| -> |107| -> -2}
+	new(x); new(p);
+	{x -> |102| -> |108| -> ?}
+	{p -> |104| -> |109| -> |?|}
+	p^ := x;
+	{p -> |104| -> |109| -> |108|}
+end.
+```
+
+
+
+
