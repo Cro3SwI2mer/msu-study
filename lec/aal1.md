@@ -13,6 +13,7 @@ First term courses, read at the Faculty of Computational Mathematics and Cyberne
 - [Lecture 8](#lecture-8)
 - [Lecture 9](#lecture-9)
 - [Lecture 10](#lecture-10)
+- [Lecture 11](#lecture-11)
 
 Lecture 4
 ---------
@@ -994,7 +995,149 @@ begin
 	{p -> |104| -> |109| -> |108|}
 end.
 ```
+Lecture 11
+----------
 
+### Queue
 
+[Doubly linked list](https://en.wikipedia.org/wiki/Doubly_linked_list):
+`x <- | | <-> | | <-> | | <-> |.|` - each element knows previous and next element
 
+[Linked list](https://en.wikipedia.org/wiki/Linked_list):
+`x <- | | --> | | --> | | --> |.|` - each elements knows only next element
 
+#### Bad implementation
+
+Implementation:
+
+```
+type
+	Link = ^elem;
+	elem = record
+		n : integer;
+		next : Link;
+	end;
+
+	Queue = Link;
+
+var x, y : Queue;
+```
+Let's find length of Queue:
+
+```
+function Len(x : Queue) : integer;
+	var n : integer;
+begin
+	n := 0;
+	while x <> nil do begin
+		n := n+1; x := x^.next;
+	end;
+	Len := n;
+end;
+```
+Let's insert element in Queue:
+
+```
+procedure InQueue(var x : Queue, y : integer);
+	var p, q : Link;
+begin
+	new(p); p^.n := y; p^.next = nil;
+	if x = nil then begin
+		x := p;
+	end
+	else begin
+		q := x;
+		while q^.next <> nil do begin
+			q := q^.next;
+		end;
+		q^.next = p;
+	end
+end;
+```
+Let's delete first element from Queue
+
+```
+function FromQueue(var x : Queue) : Link;
+	var
+begin
+	FromQueue := x;
+	if x <> nil then begin
+		x := x^.next;
+	end
+end;
+```
+Recursive implementations:
+
+```
+function Len(x : Queue) : integer;
+begin
+	Len := 0;
+	if x <> nil then Len := 1 + Len(x^.next)
+end;
+```
+
+#### Better implementation
+
+Better Queue implementation:
+
+```
+type
+	Link = ^elem;
+	elem = record
+		n : integer;
+		next : Link;
+	end;
+
+	Queue = record
+		H, K : Link;
+		Len : integer;
+	end;
+
+var x : Queue;
+
+begin
+	x.H := nil; {K := nil;}
+	x.Len := 0;
+	{procedure InitQueue(var x : Queue);}
+```
+
+New Len implementation:
+
+```
+function Len(x : Queue) : integer;
+begin
+	Len := x.Len;
+end;
+```
+New InQueue implementation:
+
+```
+procedure InQueue(var x : Queue; y : integer);
+	var p : Link;
+begin
+	new(p); p^.n := y; p^.next := nil;
+	x.K^.next := p; x.K := p; x.Len := x.Len + 1;
+end;
+```
+New FromQueue implementation:
+
+```
+function FromQueue(var x : Queue) : Link;
+begin
+	FromQueue := x.H;
+	if x.H <> nil then begin
+		x.H := x.H^.next; x.Len := x.Len - 1;
+	end
+end;
+```
+
+### Dequeue
+
+In Queue we can push back, pop front.
+In Dequeue we can push back, push front, pop back, pop front. 
+
+### List
+
+### Stack
+
+Quite important d.s., all computers implement it at hardware level.
