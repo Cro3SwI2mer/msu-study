@@ -14,6 +14,7 @@ First term courses, read at the Faculty of Computational Mathematics and Cyberne
 - [Lecture 9](#lecture-9)
 - [Lecture 10](#lecture-10)
 - [Lecture 11](#lecture-11)
+- [Lecture 12](#lecture-12)
 
 Lecture 4
 ---------
@@ -1131,13 +1132,129 @@ begin
 end;
 ```
 
+Lecture 12
+----------
+
 ### Dequeue
 
-In Queue we can push back, pop front.
-In Dequeue we can push back, push front, pop back, pop front. 
+```
+type
+	Link = ^elem;
+	elem = record
+		n : integer;
+		next : Link;
+	end;
+	List = Link; {List = elem;}
+```
 
-### List
+In Queue we can push back, pop front.
+In Dequeue we can push back, push front, pop back, pop front.
+
+Let's implement some operations. Start with deleting number.
+
+```
+procedure DelNumber(var x : List; y : integer;);
+	var p, q : Link;
+begin
+	if x <> nil then begin
+		p := x;
+		if x^.n = y then begin
+			x := x^.next;
+			dispose(p);
+		end
+		else begin
+			while (p <> nil) and (p^.next <> nil) do begin
+				if p^.next^.n = y then begin
+					q := p^.next; p^.next := q^.next; dispose(q);
+				end
+				else p := p^.next;
+			end;
+		end
+	end
+end;
+``` 
+We are deleting all elements, equal to *y* (it is wrong, should delete only first).
+
+Another, more difficult task:
+
+```
+procedure DelMinDoubleMax(var x : List);
+	var
+		k, min, max : integer;
+		p, q : Link;
+begin
+	if x <> nil then begin
+		min := x^.n; max := x^.n; p := x^.next;
+		while p <> nil do begin
+			k := p^.n;
+			if k < min then min := k;
+			if k > max then max := k;
+			p := p^.next;
+		end;
+		while (x <> nil) and (x^.n) do begin
+			p := x; x := x^.next; dispose(p);
+		end;
+		p := x;
+		while (p <> nil) do begin
+			if (p^.next <> nil) and (p^.next^.n = min) then begin
+				q := p^.next; p^.next = q^.next; dispose(q); 
+			end
+			else begin
+				if (p^.n = max) then begin
+					new(q); 
+					q^.n := max; q^.next = p^.next; p^.next := q;
+					p := q^.next;
+				end
+				else p := p^.next;
+			end
+		end;
+	end
+end;
+```
 
 ### Stack
 
 Quite important d.s., all computers implement it at hardware level.
+
+### Tree
+
+Def: Tree is connected acyclic graph
+
+Example: file system
+
+```
+type
+	Link = ^node;
+	node = record
+		l, r : Link;
+		n : integer;	
+	end;
+	BT = Link;
+
+var x, y : BT;
+```
+Let's calculate number of nodes:
+
+```
+function NN(x : BT): integer;
+begin
+	if x = nil then NN := 0;
+	else nn := 1 + NN(x^.l) + NN(x^.r);
+end;
+```
+Let's calculate tree's depth:
+
+```
+function H(x : BT): integer;
+	var lh, rh: integer;
+begin
+	if x = nil then H := 0;
+	else begin
+		lh := 0; rh := 0;
+		if x^.l <> nil then lh := H(x^.L);
+		if x^.r <> nil then rh := H(x^.R);
+		if lh < rh then lh := rh;
+		H := 1 + lh;
+	end;
+end;
+```
