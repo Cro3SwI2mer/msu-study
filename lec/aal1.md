@@ -15,6 +15,7 @@ First term courses, read at the Faculty of Computational Mathematics and Cyberne
 - [Lecture 10](#lecture-10)
 - [Lecture 11](#lecture-11)
 - [Lecture 12](#lecture-12)
+- [Lecture 13](#lecture-13)
 
 Lecture 4
 ---------
@@ -1226,7 +1227,7 @@ Example: file system
 type
 	Link = ^node;
 	node = record
-		l, r : Link;
+		{v,} l, r : Link;
 		n : integer;	
 	end;
 	BT = Link;
@@ -1257,4 +1258,64 @@ begin
 		H := 1 + lh;
 	end;
 end;
+```
+
+Lecture 13
+----------
+
+### Tree
+
+Let's copy tree:
+
+```
+function CopyBT(x : BT): BT;
+	var p, q : Link;
+begin
+	p := x;
+	if x <> nil then begin
+		new(q); q^.n := p^.n;
+		q^.l := nil; q^.r := nil;
+		if p^.l <> nil then q^.l := CopyBT(p^.l);
+		if p^.r <> nil then q^.r := CopyBT(p^.r);
+		end
+	CopyBT := q;
+end;
+```
+Let's destroy tree:
+
+```
+procedure DelBT(var x : BT);
+begin
+	if x <> nil then begin
+		if x^.l <> nil then DelBT(x^.l);
+		if x^.r <> nil then DelBT(x^.r);
+		dispose(x);
+		x := nil; {do not forget to do this!}
+		end
+end;
+```
+
+### Table (probably hash-table?)
+
+[Hash table](https://en.wikipedia.org/wiki/Hash_table)
+
+<key : value>. Keys must be comparable to each other.
+
+| Operations | Primitive |  Ordered table  | Binary Search Tree |
+| ---------- | --------- | --------------- | ------------------ |
+|   Search   |   O(n/2)  |    O(log(n))    |                    |
+|   Delete   |    O(n)   | O(log(n) + n/2) |                    |
+|   Insert   |    O(n)   | O(log(n) + n/2) |                    |
+
+BST implementation:
+
+```
+type
+	Link = ^node;
+	node = record
+		l, r : Link;
+		n : value;
+		k : key;
+		end;
+	BST = Link;
 ```
