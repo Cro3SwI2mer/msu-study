@@ -1299,7 +1299,7 @@ end;
 
 [Hash table](https://en.wikipedia.org/wiki/Hash_table)
 
-<key : value>. Keys must be comparable to each other.
+`<key : value>`. Keys must be comparable to each other.
 
 | Operations | Primitive |  Ordered table  | Binary Search Tree |
 | ---------- | --------- | --------------- | ------------------ |
