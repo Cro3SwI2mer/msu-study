@@ -16,6 +16,7 @@ First term courses, read at the Faculty of Computational Mathematics and Cyberne
 - [Lecture 11](#lecture-11)
 - [Lecture 12](#lecture-12)
 - [Lecture 13](#lecture-13)
+- [Lecture 14](#lecture-14)
 
 Lecture 4
 ---------
@@ -1295,7 +1296,7 @@ begin
 end;
 ```
 
-### Table (probably hash-table?)
+### Table
 
 [Hash table](https://en.wikipedia.org/wiki/Hash_table)
 
@@ -1313,9 +1314,130 @@ BST implementation:
 type
 	Link = ^node;
 	node = record
-		l, r : Link;
+		{v,} l, r : Link;
 		n : value;
 		k : key;
 		end;
 	BST = Link;
+```
+
+Lecture 14
+----------
+
+### Table
+
+BST implementation:
+
+```
+type
+	Link = ^node;
+	node = record
+		{v,} l, r : Link;
+		n : value;
+		k : key;
+		b : integer;
+		end;
+	BST = Link;
+```
+
+#### Functions
+
+Recursive implementation
+
+```
+function P(x : BST; y : key): Link;
+begin
+	P := x;
+	if x <> nil then
+		begin
+			if x^.k > y then P := P(x^.l, y)
+			if x^.k < y then P := P(x^.r, y)
+		end
+end;
+```
+Implementation with loop
+
+```
+function P(x : BST; y : key): Link;
+begin
+	P := x;
+	while (x <> nil) and (x^.k <> y) do
+		begin
+			if x^.k > y then x := x^.l
+			else x := x^.r;
+		end;
+end;
+```
+Let's print BST elements (keys)
+
+```
+procedure Print(x : BST);
+begin
+	if x <> nil then
+		begin
+			Print(x^.l);
+			write(x^.k{:3});
+			Print(x^.r);
+		end
+end;
+```
+Let's insert in BST
+
+```
+procedure InBST(var x : BST; y : key; {var} z : value);
+begin
+	
+end;
+```
+Let's delete from BST:
+
+```
+procedure DelBST(var x : BST; y : key);
+begin
+	
+end;
+```
+
+### Hash-table
+
+Direct display table
+
+```
+const N = 10000..0;
+
+key = 0..N;
+
+Tab = array[0..N] of record 
+	k : key; n : value;
+	end;
+
+var x : Tab;
+
+begin
+	init(x); {initialize x}
+end.
+```
+Let's find some element in Table
+
+```
+function Search(var x : Tab; y : key): key;
+begin
+	Search := x[y].k;
+end;
+```
+Let's insert in Table
+
+```
+procedure InTab(var x : Tab; y : key; z : value);
+begin
+	x[y].k := y; x[y].n := z;
+end;
+```
+Let's delete from Table
+
+```
+procedure DelTab(var x : Tab; y : key);
+begin
+	x[y].k := 0; x[y].n := 0;
+end;
 ```
