@@ -42,11 +42,11 @@ We will add threads dynamically, in the depth of calculation.
 ## Blocks
 ```
 <block> ::= [<label section>]
-			[<constants section>]
-			[<types section>]
-			[<variables section>]
-			[<procedures and functions section>]
-			[<operators section>]
+	    [<constants section>]
+	    [<types section>]
+	    [<variables section>]
+	    [<procedures and functions section>]
+	    [<operators section>]
 ```
 Program -> Data processing (in ```<operators section>```) ->:
 - Constants
@@ -78,7 +78,7 @@ Parameter - constant, but it can change.
 ### Variables section
 ```
 <variables section> ::= <name> {, <name>} ... : <type>;
-					   {<name> {, <name>} ... : <type>;} ...
+		       {<name> {, <name>} ... : <type>;} ...
 ```
 Variables may have next **attributes:** (*required*, not required)
 - Name
