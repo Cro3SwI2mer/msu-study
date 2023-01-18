@@ -64,7 +64,7 @@ Actually, we will not use this section.
 ### Constants section
 ```
 const <name> = <constant>;
-	 {<name> = <constant>;} ...
+     {<name> = <constant>;} ...
 ```
 Examples:
 ```
